@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Анкета об ИИ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="form-wrapper">
+  <h1>Анкета об использовании ИИ</h1>
+  <form id="survey-form">
+
+<div id="intro-question">
+    <!-- v1 -->
+    <label>1. Используешь ли ты искусственный интеллект (например, ChatGPT, Midjourney, нейросети для обработки фото/звука, умные помощники) в своей жизни?</label><br>
+<input type="radio" name="v1" value="1" required> 1. Да, регулярно<br>
+<input type="radio" name="v1" value="2"> 2. Да, иногда<br>
+<input type="radio" name="v1" value="3"> 3. Пробовал(а), но не пользуюсь<br>
+<input type="radio" name="v1" value="4"> 4. Никогда не пользовался(лась)<br><br>
+<center><img src="https://miro.medium.com/v2/resize:fit:1358/0*Np4tU2UZZctDgcju.png" alt="Описание картинки" width="300"></center>
+  <button id="to-main" type="button">Продолжить</button>
+</div>
+
+<!-- Основные вопросы -->
+<div id="main-questions" style="display:none;">
+    <label>2. Как часто ты используешь ИИ?</label><br>
+	<input type="radio" name="v2" value="1" required>1. Ежедневно<br>
+	<input type="radio" name="v2" value="2">2. Несколько раз в неделю<br>
+	<input type="radio" name="v2" value="3">3. Несколько раз в месяц<br>
+	<input type="radio" name="v2" value="4">4. Раз в месяц<br>
+	<input type="radio" name="v2" value="5">5. Раз в полгода<br><br>
+
+    <!-- v3 -->
+    <label>3. Какую платформу ИИ ты используешь чаще всего?</label><br>
+	<input type="radio" name="v3" value="1" required>1. Мобильное приложение (Chat GPT, Poe, DeepSeak и т.п.)<br>
+	<input type="radio" name="v3" value="2">2. Веб-сайт (Copilot, DeepSeak, PDF GPT, Gemini и др.)<br>
+	<input type="radio" name="v3" value="3">3. Встроенный в браузер 3(Edge, Atlas, поиск с Алисой и т.д.)<br>
+	<input type="radio" name="v3" value="4">4. Голосовой помощник 4(Алиса, Маруся, Siri и др.)<br>
+	<input type="radio" name="v3" value="5">5. Чат в Telegram<br>
+	<input type="radio" name="v3" value="6">6. Другое<br>
+	<input type="text" name="v3_other" placeholder="Если другое, напишите"><br><br>
+
+    <!-- v4 -->
+    <label>4. На сколько ты доверяешь ответам ИИ?</label><br>
+	<input type="radio" name="v4" value="1" required>1. Полностью доверяю и никогда не проверяю ответы<br>
+	<input type="radio" name="v4" value="2">2. Доверяю, если он даёт ссылки на источники, иначе – разбираюсь сам(а)<br>
+	<input type="radio" name="v4" value="3">3. Доверяю только тем ИИ, которые работают только на основе введённых данных (NotebookLM)<br>
+	<input type="radio" name="v4" value="4">4. Не доверяю, всегда проверяю фактические данные по приведённым ссылкам или сторонним источникам<br>
+	<input type="radio" name="v4" value="5">5. Не очень доверяю ИИ, но могу забить на проверку, если не считаю задачу важной<br><br>
+
+    <!-- v5 -->
+    <label>5. Как ты думаешь, влияет ли тема запроса на то, как ты обращаешься к ИИ (более формально или неформально)?</label><br>
+	<input type="radio" name="v5" value="1" required>1. Да, всегда<br>
+	<input type="radio" name="v5" value="2">2. Да, часто<br>
+	<input type="radio" name="v5" value="3">3. Да, иногда<br>
+	<input type="radio" name="v5" value="4">4. Да, но редко<br>
+	<input type="radio" name="v5" value="5">5. Нет, не влияет<br><br>
+
+    <!-- v6 -->
+    <label>6. Вспомни свой последний запрос к ИИ. Каким он был?</label><br>
+    <textarea name="v6" required></textarea><br><br>
+
+    <!-- v7 -->
+    <label>7. Тебе нужно узнать о Шреке. Какой из запросов больше всего похож на тот, с которым ты обратился бы к ИИ?</label><br>
+	<input type="radio" name="v7" value="1" required>1. Шрек<br>
+	<input type="radio" name="v7" value="2">2. Расскажи, кто такой Шрек<br>
+	<input type="radio" name="v7" value="3">3. Мне нужно понять, кто такой Шрек, напиши коротко со ссылками на источники<br>
+	<input type="radio" name="v7" value="4">4. Слушай, я недавно услышала о Шреке, расскажи, пожалуйста, о нём<br><br>
+
+    <!-- v8 табличный -->
+    <label>8. Какой стиль речи ты используешь при разных типах запросов?</label><br>
+    <table border="1">
+      <tr>
+        <th>Тип задачи</th>
+        <th>Формальный (чёткая постановка задачи и характера ответа)</th>
+        <th>Нейтральный (минимум слов, только сухие факты)</th>
+        <th>Неформальный (разговорный)</th>
+        <th>Личный (есть сведения о себе и своём отношении к запросу, эмоциональная вовлечённость)</th>
+      </tr>
+      <tr>
+        <td>Информационный</td>
+        <td><input type="radio" name="v8_info" value="Формальный" required></td>
+        <td><input type="radio" name="v8_info" value="Нейтральный"></td>
+        <td><input type="radio" name="v8_info" value="Неформальный"></td>
+        <td><input type="radio" name="v8_info" value="Личный"></td>
+      </tr>
+      <tr>
+        <td>Творческая задача</td>
+        <td><input type="radio" name="v8_art" value="Формальный" required></td>
+        <td><input type="radio" name="v8_art" value="Нейтральный"></td>
+        <td><input type="radio" name="v8_art" value="Неформальный"></td>
+        <td><input type="radio" name="v8_art" value="Личный"></td>
+      </tr>
+      <tr>
+        <td>Техническая инструкция</td>
+        <td><input type="radio" name="v8_tech" value="Формальный" required></td>
+        <td><input type="radio" name="v8_tech" value="Нейтральный"></td>
+        <td><input type="radio" name="v8_tech" value="Неформальный"></td>
+        <td><input type="radio" name="v8_tech" value="Личный"></td>
+      </tr>
+      <tr>
+        <td>Эмоциональная поддержка</td>
+        <td><input type="radio" name="v8_emot" value="Формальный" required></td>
+        <td><input type="radio" name="v8_emot" value="Нейтральный"></td>
+        <td><input type="radio" name="v8_emot" value="Неформальный"></td>
+        <td><input type="radio" name="v8_emot" value="Личный"></td>
+      </tr>
+      <tr>
+        <td>Личное обращение</td>
+        <td><input type="radio" name="v8_lich" value="Формальный" required></td>
+        <td><input type="radio" name="v8_lich" value="Нейтральный"></td>
+        <td><input type="radio" name="v8_lich" value="Неформальный"></td>
+        <td><input type="radio" name="v8_lich" value="Личный"></td>
+      </tr>
+      <tr>
+        <td>Повторный запрос</td>
+        <td><input type="radio" name="v8_povt" value="Формальный" required></td>
+        <td><input type="radio" name="v8_povt" value="Нейтральный"></td>
+        <td><input type="radio" name="v8_povt" value="Неформальный"></td>
+        <td><input type="radio" name="v8_povt" value="Личный"></td>
+      </tr>
+    </table><br>
+
+        <!-- v9 -->
+    <label>9. Что, по-твоему, больше всего влияет на твой выбор стиля речи при обращении к ИИ?</label><br>
+	<input type="radio" name="v9" value="1" required>1. Цель запроса<br>
+	<input type="radio" name="v9" value="2">2. Эмоциональное состояние<br>
+	<input type="radio" name="v9" value="3">3. Ожидаемый ответ<br>
+	<input type="radio" name="v9" value="4">4. Привычка общения<br>
+	<input type="radio" name="v9" value="5">5. Другое<br>
+	<input type="text" name="v9_other" placeholder="Если другое, напиши"><br><br>
+
+    <!-- v10 -->
+    <label>10. Обращаясь к ИИ с новым запросом, используешь ли ты слова вежливости (например, «пожалуйста», «будь добр», приветствия)?</label><br>
+	<input type="radio" name="v10" value="1" required>1. Всегда<br>
+	<input type="radio" name="v10" value="2">2. Часто<br>
+	<input type="radio" name="v10" value="3">3. Иногда<br>
+	<input type="radio" name="v10" value="4">4. Редко<br>
+	<input type="radio" name="v10" value="5">5. Никогда<br><br>
+
+    <!-- v11 -->
+    <label>11. Как часто ты благодаришь ИИ за успешное выполнение задачи («спасибо», «ты молодец»)?</label><br>
+	<input type="radio" name="v11" value="1" required>1. Всегда<br>
+	<input type="radio" name="v11" value="2">2. Часто<br>
+	<input type="radio" name="v11" value="3">3. Иногда<br>
+	<input type="radio" name="v11" value="4">4. Редко<br>
+	<input type="radio" name="v11" value="5">5. Никогда<br><br>
+
+    <!-- v12_rang -->
+    <label>12.  Проранжируй ситуации общения с ИИ, при которых ты чаще используешь/мог бы использовать слова вежливости, где 1 — наиболее часто, 5 — реже всего  (например, «спасибо», «отлично», «хорошо»):</label><br>
+    <input type="number" name="v12_start_success" min="1" max="5" placeholder="В начале работы с ИИ, когда он сразу правильно выполняет заданные задачи"><br>
+    <input type="number" name="v12_emotion_anyway" min="1" max="5" placeholder="Когда я просто хочу выразить свои эмоции — вне зависимости от качества ответа"><br>
+    <input type="number" name="v12_emotional_topic" min="1" max="5" placeholder="Когда тема разговора эмоционально значимая (психология, отношения, самопомощь)"><br>
+    <input type="number" name="v12_help_needed" min="1" max="5" placeholder="Когда мне нужна помощь в сложной ситуации"><br>
+    <input type="number" name="v12_comfortable" min="1" max="5" placeholder="Когда я чувствую себя комфортно с ИИ"><br><br>
+
+    <!-- v13 -->
+    <label>13. Обращаясь к ИИ с новым запросом, используешь ли ты слова грубости (например, «ты дурак», «сделай нормально», нецензурная лексика, приказной тон)?</label><br>
+	<input type="radio" name="v13" value="1" required>1. Всегда<br>
+	<input type="radio" name="v13" value="2">2. Часто<br>
+	<input type="radio" name="v13" value="3">3. Иногда<br>
+	<input type="radio" name="v13" value="4">4. Редко<br>
+	<input type="radio" name="v13" value="5">5. Никогда<br><br>
+
+    <!-- v14 -->
+    <label>14. Как часто ты ругаешь ИИ за неправильное выполнение задачи? (например, «ты тупой?!, «ты написал какой-то бред»,  нецензурная лексика)</label><br>
+	<input type="radio" name="v14" value="1" required>1. Всегда<br>
+	<input type="radio" name="v14" value="2">2. Часто<br>
+	<input type="radio" name="v14" value="3">3. Иногда<br>
+	<input type="radio" name="v14" value="4">4. Редко<br>
+	<input type="radio" name="v14" value="5">5. Никогда<br><br>
+
+    <!-- v15_rang -->
+    <label>15.Проранжируй ситуации общения с ИИ, при которых ты чаще используешь/мог бы использовать слова грубости, где  1 — наиболее часто, 5 — реже всего (например, оскорбления, нецензурная лексика, агрессия):</label><br>
+    <input type="number" name="v15_wrong_first" min="1" max="5" placeholder="Когда ИИ с первого раза даёт явно неверный или бесполезный ответ, не соответствующий запросу"><br>
+    <input type="number" name="v15_many_attempts" min="1" max="5" placeholder="Когда я многократно формулирую запрос, но ИИ не может дать нужный результат"><br>
+    <input type="number" name="v15_tech_fail" min="1" max="5" placeholder="Когда происходит технический сбой: ИИ «зависает», выдает ошибку или не отвечает"><br>
+    <input type="number" name="v15_emotion_anyway" min="1" max="5" placeholder="Когда я просто хочу выразить свои эмоции — вне зависимости от качества ответа"><br>
+    <input type="number" name="v15_long_dialogue" min="1" max="5" placeholder="Когда взаимодействие длится долго (более 5 сообщений)"><br><br>
+
+    <!-- v16_poly -->
+    <label>16. Какие стратегии ты используешь для получения лучшего ответа? (можно выбрать несколько)</label><br>
+    <input type="checkbox" name="v16_poly" value="1">1. Обещаю доллар<br>
+    <input type="checkbox" name="v16_poly" value="2">2. Использую вежливость/грубость<br>
+    <input type="checkbox" name="v16_poly" value="3">3. Пишу капсом<br>
+    <input type="checkbox" name="v16_poly" value="4">4. Сокращаю запрос до минимума знаков<br>
+    <input type="checkbox" name="v16_poly" value="5">5. Создаю новый чат<br>
+    <input type="checkbox" name="v16_poly" value="6">6. Прошу ссылки на источники<br>
+    <input type="checkbox" name="v16_poly" value="7">7. Использую встроенные функции (“глубокое мышление”, “поиск”)<br>
+    <input type="checkbox" name="v16_poly" value="8">8. Делаю запрос на другом языке<br>
+    <input type="checkbox" name="v16_poly" value="9">9. Задаю роль ИИ (“Сделай анализ, как его бы сделал специалист в области…”)<br>
+    <input type="text" name="v16_other" placeholder="10. Другое"><br><br>
+
+    <!-- v17_poly -->
+    <label>17. Какие чувства вызывает у тебя общение с ИИ? (до 5 вариантов)</label><br>
+    <input type="checkbox" name="v17_poly" value="1">1. Чувствую себя глупо<br>
+    <input type="checkbox" name="v17_poly" value="2">2. Поднимается настроение<br>
+    <input type="checkbox" name="v17_poly" value="3">3. Раздражаюсь<br>
+    <input type="checkbox" name="v17_poly" value="4">4. Чувствую бессилие и опустошение<br>
+    <input type="checkbox" name="v17_poly" value="5">5. Чувствую вину<br>
+    <input type="checkbox" name="v17_poly" value="6">6. Испытываю облегчение<br>
+    <input type="checkbox" name="v17_poly" value="7">7. Горжусь своей работой<br>
+    <input type="checkbox" name="v17_poly" value="8">8. Мне смешно<br>
+    <input type="text" name="v17_other" placeholder="9. Другое"><br><br>
+
+    <!-- v18_poly -->
+    <label>18. Какие чувства ты испытываешь при эмоциональных запросах к ИИ?</label><br>
+    <input type="checkbox" name="v18_poly" value="1">1. Тревога<br>
+    <input type="checkbox" name="v18_poly" value="2">2. Надежда<br>
+    <input type="checkbox" name="v18_poly" value="3">3. Одиночество<br>
+    <input type="checkbox" name="v18_poly" value="4">4. Доверие<br>
+    <input type="checkbox" name="v18_poly" value="5">5. Разочарование<br>
+    <input type="text" name="v18_other" placeholder="6. Другое"><br><br>
+
+    <!-- v19 -->
+    <label>19. Задаёшь ли ты ИИ параметры своей личности? (например “я вообще не разбираюсь в теме”, “я – студент философского факультета” и прочее)</label><br>
+	<input type="radio" name="v19" value="1" required>1. Да, всегда<br>
+	<input type="radio" name="v19" value="2">2. Да, в конкретных задачах<br>
+	<input type="radio" name="v19" value="3">3. Редко, от случая к случаю<br>
+	<input type="radio" name="v19" value="4">4. Редко, если результат не устраивает<br>
+	<input type="radio" name="v19" value="5">5. Нет<br><br>
+
+    <!-- v20 -->
+    <label>20. Задаёшь ли ты ИИ параметры его личности и стиля общения? (например “ты - профессиональный аналитик”, “отвечай мне максимально грубо” и прочее)</label><br>
+	<input type="radio" name="v20" value="1" required>1. Да, в большинстве запросов<br>
+	<input type="radio" name="v20" value="2">2. Да, в конкретных задачах<br>
+	<input type="radio" name="v20" value="3">3. Редко, от случая к случаю<br>
+	<input type="radio" name="v20" value="4">4. Редко, если результат не устраивает<br>
+	<input type="radio" name="v20" value="5">5. Нет, не задаю<br><br>
+
+    <!-- v21 -->
+    <label>21. К какому полу относит себя ИИ, с которым ты общаешься?</label><br>
+	<input type="radio" name="v21" value="1" required>1. Мужской<br>
+	<input type="radio" name="v21" value="2">2. Женский<br>
+	<input type="radio" name="v21" value="3">3. Меняется при новых запросах<br>
+	<input type="radio" name="v21" value="4">4. ИИ обезличивает себя<br><br>
+
+    <!-- v22 -->
+    <label>22. Используешь ли ты ИИ для общения?</label><br>
+	<input type="radio" name="v22" value="1" required>1. Да, иногда мне не хватает общения<br>
+	<input type="radio" name="v22" value="2">2. Да, в качестве виртуального друга<br>
+	<input type="radio" name="v22" value="3">3. Да, в качестве романтического партнёра<br>
+	<input type="radio" name="v22" value="4">4. Да, как соигрока в РПГ<br>
+	<input type="radio" name="v22" value="5">5. Не использую<br>
+	<input type="radio" name="v22" value="6">6. Другое<br>
+	<input type="text" name="v22_other" id="v22_other" placeholder="Если другое, напиши" style="display:none;"><br><br>
+
+<button id="to-demographic" type="button">Продолжить</button>
+</div>
+
+<div id="demographic-block" style="display:none;">
+    <h2>Демографический блок</h2>
+
+    <!-- sex -->
+<div class="question-block">
+    <label>Назови свой пол:</label><br>
+	<input type="radio" name="sex" value="0" required>мужской<br>
+	<input type="radio" name="sex" value="1">женский<br>
+</div>
+<div class="question-block">
+    <!-- course -->
+    <label>На каком курсе ты учишься?</label><br>
+	<input type="radio" name="course" value="1" required>1<br>
+	<input type="radio" name="course" value="2">2<br>
+	<input type="radio" name="course" value="3">3<br>
+	<input type="radio" name="course" value="4">4<br><br>
+</div>
+<div class="question-block">
+    <!-- faculty -->
+    <label>Выбери свой факультет/институт:</label><br>
+    <select name="faculty" required>
+      <option value="Физический">Физический</option>
+      <option value="Радиофизики и компьютерных технологий">Радиофизики и компьютерных технологий</option>
+      <option value="Прикладной математики и информатики">Прикладной математики и информатики</option>
+      <option value="Механико-математический">Механико-математический</option>
+      <option value="Химический">Химический</option>
+      <option value="Биологический">Биологический</option>
+      <option value="Географии и геоинформатики">Географии и геоинформатики</option>
+      <option value="Журналистики">Журналистики</option>
+      <option value="Филологический">Филологический</option>
+      <option value="Философии и социальных наук">Философии и социальных наук</option>
+      <option value="Экономический">Экономический</option>
+      <option value="Исторический">Исторический</option>
+      <option value="Юридический">Юридический</option>
+      <option value="Международных отношений">Международных отношений</option>
+      <option value="Социокультурных коммуникаций">Социокультурных коммуникаций</option>
+      <option value="Военный">Военный</option>
+      <option value="Институт теологии имени святых Мефодия и Кирилла">Институт теологии имени святых Мефодия и Кирилла</option>
+      <option value="Институт бизнеса БГУ">Институт бизнеса БГУ</option>
+      <option value="Международный экологический институт им. Сахарова">Международный экологический институт им. Сахарова</option>
+    </select><br><br>
+</div>
+<div class="question-block">
+    <!-- email -->
+    <label>Здесь можешь оставить свою почту, если тебе интересны результаты нашей работы:</label><br>
+    <input type="email" name="email" placeholder="example@domain.com"><br><br>
+</div>
+    <button type="submit">Отправить анкету</button>
+</div>
+
+  </form>
+</div>
+<script type="module" src="script.js"></script>
+</body>
+</html>
