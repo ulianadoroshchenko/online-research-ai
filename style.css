@@ -176,4 +176,83 @@ button:hover {
 
 .question-block {
   margin-bottom: 24px; /* расстояние между вопросами */
+
 }
+
+/* Общие стили */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #fdfaf6;
+  color: #333;
+}
+
+.form-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Стили для заголовков и блоков */
+h1, h2 {
+  text-align: center;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.question-block {
+  margin-bottom: 20px;
+}
+
+/* Кнопки */
+button {
+  background-color: #6c63ff;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #574fd6;
+}
+
+/* Изображения */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Адаптивность */
+@media screen and (max-width: 600px) {
+  .form-wrapper {
+    padding: 10px;
+  }
+
+  label, input, select {
+    font-size: 16px;
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  input[type="radio"] {
+    width: auto;
+    display: inline-block;
+    margin-right: 8px;
+  }
+
+  button {
+    width: 100%;
+    font-size: 18px;
+  }
+
+  h1, h2 {
+    font-size: 22px;
+  }
