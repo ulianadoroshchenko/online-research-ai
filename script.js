@@ -17,14 +17,6 @@ let userIp = null;
   }
 })();
 
-// отслеживаем последний вопрос
-let lastQuestion = null;
-document.querySelectorAll('input, select, textarea').forEach(el => {
-  el.addEventListener('change', () => {
-    lastQuestion = el.name;
-  });
-});
-
 // переходы между блоками
 document.getElementById('to-main').addEventListener('click', () => {
   const selected = document.querySelector('input[name="v1"]:checked');
@@ -62,30 +54,34 @@ document.querySelector('form').addEventListener('submit', async (e) => {
   const formData = new FormData(e.target);
   const data = Object.fromEntries(formData.entries());
 
-  // 🔥 Вот сюда вставляешь универсальную очистку:
+  // очистка пустых значений
   Object.keys(data).forEach(key => {
     if (data[key] === "") {
-      delete data[key]; // или data[key] = null;
+      delete data[key];
     }
   });
+
+  // считаем время прохождения
+  const endTime = Date.now();
+  const durationSeconds = Math.floor((endTime - startTime) / 1000);
+
   const payload = {
-   ...data,
-   ip: userIp || null,
-   created_at: new Date().toISOString(),
-   time_and: lastQuestion || null,
-   user_agent: navigator.userAgent
-  // minutes: ... ← удалить
-};
+    ...data,
+    ip: userIp || null,
+    created_at: new Date().toISOString(),
+    user_agent: navigator.userAgent,
+    seconds: durationSeconds
+  };
 
   console.log('Финальный payload:', payload);
-  delete data.minutes;
+
   const { error } = await supabaseClient.from('responses').insert([payload]);
 
   if (error) {
     console.error('Ошибка при отправке:', error.message || JSON.stringify(error));
     alert('Что-то пошло не так...');
   } else {
-    alert('Анкета успешно отправлена!');
+    alert(`Анкета успешно отправлена! Время прохождения: ${durationSeconds} секунд`);
     e.target.reset();
   }
 });
