@@ -229,6 +229,13 @@ img {
   margin: 0 auto;
 }
 
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
 /* Адаптивность */
 @media screen and (max-width: 600px) {
   .form-wrapper {
@@ -256,3 +263,12 @@ img {
   h1, h2 {
     font-size: 22px;
   }
+  table {
+    font-size: 14px;
+    min-width: 480px; /* гарантирует горизонтальный скролл */
+  }
+
+  th, td {
+    padding: 10px 12px;
+  }
+}
