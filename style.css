@@ -120,7 +120,7 @@ fieldset {
 }
 
 table {
-  width: 100%;
+  width: 90%;
   border-collapse: collapse;
   margin-top: 24px;
   background-color: rgba(255, 255, 255, 0.6);
@@ -231,7 +231,7 @@ button:hover {
 
   table {
     font-size: 14px;
-    min-width: 300px; /* гарантирует горизонтальный скролл */
+    min-width: 90%; /* гарантирует горизонтальный скролл */
   }
 
   th, td {
@@ -245,4 +245,5 @@ button:hover {
     margin-bottom: 24px;
   }
 }
+
 
