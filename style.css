@@ -75,6 +75,11 @@ select:focus {
   outline: none;
 }
 
+.missing-answer {
+  border: 2px solid red;
+  background-color: #ffe6e6;
+}
+
 button[type="submit"] {
   background: linear-gradient(to right, #6a4fb3, #8e7ce0);
   color: white;
@@ -245,6 +250,7 @@ th, td {
   padding: 10px 12px;
 }
 }
+
 
 
 
