@@ -124,6 +124,13 @@ fieldset {
   box-shadow: 0 4px 10px rgba(244, 201, 93, 0.2);
 }
 
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
 table {
   width: 90%;
   border-collapse: collapse;
@@ -234,13 +241,6 @@ button:hover {
     border-radius: 14px;
   }
 
-.table-wrapper {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  border-radius: 12px;
-  margin-bottom: 24px;
-}
-
 table {
   font-size: 14px;
   min-width: 1000px; /* ширина больше экрана, чтобы появился скролл */
@@ -250,6 +250,7 @@ th, td {
   padding: 10px 12px;
 }
 }
+
 
 
 
