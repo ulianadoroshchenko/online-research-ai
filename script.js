@@ -110,4 +110,69 @@ document.getElementById('to-demographic').addEventListener('click', () => {
 });
 
 // отправка формы
-document.querySelector('form').addEventListener('submit', async
+document.querySelector('form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const requiredFields = e.target.querySelectorAll('[required]');
+  let missing = [];
+
+  requiredFields.forEach(field => {
+    if (field.type === 'radio') {
+      const groupChecked = document.querySelector(`input[name="${field.name}"]:checked`);
+      if (!groupChecked) {
+        missing.push(field.name);
+        document.querySelectorAll(`input[name="${field.name}"]`).forEach(radio => {
+          radio.classList.add('missing-answer');
+        });
+      } else {
+        document.querySelectorAll(`input[name="${field.name}"]`).forEach(radio => {
+          radio.classList.remove('missing-answer');
+        });
+      }
+    } else {
+      if (!field.value) {
+        missing.push(field.name);
+        field.classList.add('missing-answer');
+      } else {
+        field.classList.remove('missing-answer');
+      }
+    }
+  });
+
+  if (missing.length > 0) {
+    alert("Необходимо ответить на все обязательные вопросы перед отправкой.");
+    return; // прерываем отправку
+  }
+
+  const formData = new FormData(e.target);
+  const data = Object.fromEntries(formData.entries());
+
+  Object.keys(data).forEach(key => {
+    if (data[key] === "") {
+      delete data[key];
+    }
+  });
+
+  const endTime = Date.now();
+  const durationSeconds = Math.floor((endTime - startTime) / 1000);
+
+  const payload = {
+    ...data,
+    ip: userIp || null,
+    created_at: new Date().toISOString(),
+    user_agent: navigator.userAgent,
+    seconds: durationSeconds
+  };
+
+  console.log('Финальный payload:', payload);
+
+  const { error } = await supabaseClient.from('responses').insert([payload]);
+
+  if (error) {
+    console.error('Ошибка при отправке:', error.message || JSON.stringify(error));
+    alert('Что-то пошло не так...');
+  } else {
+    alert(`Спасибо за участие! Твои ответы уже обрабатываются нашими нейронами... ну, почти.`);
+    e.target.reset();
+  }
+});
