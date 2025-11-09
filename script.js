@@ -21,12 +21,27 @@ let userIp = null;
 document.getElementById('to-main').addEventListener('click', () => {
   const requiredFields = document.querySelectorAll('#intro-question [required]');
   let missing = [];
+
   requiredFields.forEach(field => {
-    if (!field.value || (field.type === 'radio' && !document.querySelector(`input[name="${field.name}"]:checked`))) {
-      missing.push(field.name);
-      field.classList.add('missing-answer'); // подсветка
+    if (field.type === 'radio') {
+      const groupChecked = document.querySelector(`input[name="${field.name}"]:checked`);
+      if (!groupChecked) {
+        missing.push(field.name);
+        document.querySelectorAll(`input[name="${field.name}"]`).forEach(radio => {
+          radio.classList.add('missing-answer');
+        });
+      } else {
+        document.querySelectorAll(`input[name="${field.name}"]`).forEach(radio => {
+          radio.classList.remove('missing-answer');
+        });
+      }
     } else {
-      field.classList.remove('missing-answer');
+      if (!field.value) {
+        missing.push(field.name);
+        field.classList.add('missing-answer');
+      } else {
+        field.classList.remove('missing-answer');
+      }
     }
   });
 
@@ -58,15 +73,29 @@ document.getElementById('to-main').addEventListener('click', () => {
 });
 
 document.getElementById('to-demographic').addEventListener('click', () => {
-  // проверка обязательных полей в main-questions
   const requiredFields = document.querySelectorAll('#main-questions [required]');
   let missing = [];
+
   requiredFields.forEach(field => {
-    if (!field.value || (field.type === 'radio' && !document.querySelector(`input[name="${field.name}"]:checked`))) {
-      missing.push(field.name);
-      field.classList.add('missing-answer'); // подсветка
+    if (field.type === 'radio') {
+      const groupChecked = document.querySelector(`input[name="${field.name}"]:checked`);
+      if (!groupChecked) {
+        missing.push(field.name);
+        document.querySelectorAll(`input[name="${field.name}"]`).forEach(radio => {
+          radio.classList.add('missing-answer');
+        });
+      } else {
+        document.querySelectorAll(`input[name="${field.name}"]`).forEach(radio => {
+          radio.classList.remove('missing-answer');
+        });
+      }
     } else {
-      field.classList.remove('missing-answer');
+      if (!field.value) {
+        missing.push(field.name);
+        field.classList.add('missing-answer');
+      } else {
+        field.classList.remove('missing-answer');
+      }
     }
   });
 
@@ -81,44 +110,4 @@ document.getElementById('to-demographic').addEventListener('click', () => {
 });
 
 // отправка формы
-document.querySelector('form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  const formData = new FormData(e.target);
-  const data = Object.fromEntries(formData.entries());
-
-  // очистка пустых значений
-  Object.keys(data).forEach(key => {
-    if (data[key] === "") {
-      delete data[key];
-    }
-  });
-
-  // считаем время прохождения
-  const endTime = Date.now();
-  const durationSeconds = Math.floor((endTime - startTime) / 1000);
-
-  const payload = {
-    ...data,
-    ip: userIp || null,
-    created_at: new Date().toISOString(),
-    user_agent: navigator.userAgent,
-    seconds: durationSeconds
-  };
-
-  console.log('Финальный payload:', payload);
-
-  const { error } = await supabaseClient.from('responses').insert([payload]);
-
-  if (error) {
-    console.error('Ошибка при отправке:', error.message || JSON.stringify(error));
-    alert('Что-то пошло не так...');
-  } else {
-    alert(`Спасибо за участие! Твои ответы уже обрабатываются нашими нейронами... ну, почти.`);
-    e.target.reset();
-  }
-});
-
-
-
-
+document.querySelector('form').addEventListener('submit', async
