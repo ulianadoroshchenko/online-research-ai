@@ -238,13 +238,14 @@ button:hover {
 
 table {
   font-size: 14px;
-  min-width: 600px; /* ширина больше экрана, чтобы появился скролл */
+  min-width: 1000px; /* ширина больше экрана, чтобы появился скролл */
 }
 
 th, td {
   padding: 10px 12px;
 }
 }
+
 
 
 
