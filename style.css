@@ -229,21 +229,22 @@ button:hover {
     border-radius: 14px;
   }
 
-  table {
-    font-size: 14px;
-    min-width: 90%; /* гарантирует горизонтальный скролл */
-  }
-
-  th, td {
-    padding: 10px 12px;
-  }
-
-  .table-wrapper {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    border-radius: 12px;
-    margin-bottom: 24px;
-  }
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 12px;
+  margin-bottom: 24px;
 }
+
+table {
+  font-size: 14px;
+  min-width: 600px; /* ширина больше экрана, чтобы появился скролл */
+}
+
+th, td {
+  padding: 10px 12px;
+}
+}
+
 
 
