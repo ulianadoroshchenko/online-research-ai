@@ -51,6 +51,21 @@ document.getElementById('to-demographic').addEventListener('click', () => {
 document.querySelector('form').addEventListener('submit', async (e) => {
   e.preventDefault();
 
+  // проверяем обязательные поля
+  const requiredFields = e.target.querySelectorAll('[required]');
+  let missing = [];
+
+  requiredFields.forEach(field => {
+    if (!field.value || (field.type === 'radio' && !e.target.querySelector(`input[name="${field.name}"]:checked`))) {
+      missing.push(field.name);
+    }
+  });
+
+  if (missing.length > 0) {
+    alert("Анкета не отправлена. Необходимо ответить на все обязательные вопросы.");
+    return; // прерываем отправку
+  }
+
   const formData = new FormData(e.target);
   const data = Object.fromEntries(formData.entries());
 
@@ -85,4 +100,5 @@ document.querySelector('form').addEventListener('submit', async (e) => {
     e.target.reset();
   }
 });
+
 
