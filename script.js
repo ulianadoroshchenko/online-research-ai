@@ -81,7 +81,8 @@ document.querySelector('form').addEventListener('submit', async (e) => {
     console.error('Ошибка при отправке:', error.message || JSON.stringify(error));
     alert('Что-то пошло не так...');
   } else {
-    alert(`Анкета успешно отправлена! Время прохождения: ${durationSeconds} секунд`);
+    alert(`Спасибо за участие! Твои ответы уже обрабатываются нашими нейронами... ну, почти.`);
     e.target.reset();
   }
 });
+
