@@ -19,11 +19,14 @@ let userIp = null;
 
 // переходы между блоками
 document.getElementById('to-main').addEventListener('click', () => {
-    const requiredFields = document.querySelectorAll('#intro-question [required]');
+  const requiredFields = document.querySelectorAll('#intro-question [required]');
   let missing = [];
   requiredFields.forEach(field => {
     if (!field.value || (field.type === 'radio' && !document.querySelector(`input[name="${field.name}"]:checked`))) {
       missing.push(field.name);
+      field.classList.add('missing-answer'); // подсветка
+    } else {
+      field.classList.remove('missing-answer');
     }
   });
 
@@ -31,6 +34,7 @@ document.getElementById('to-main').addEventListener('click', () => {
     alert("Необходимо ответить на все обязательные вопросы перед переходом.");
     return; // прерываем переход
   }
+
   const selected = document.querySelector('input[name="v1"]:checked');
   if (!selected) {
     alert("Пожалуйста, выбери вариант.");
@@ -54,12 +58,15 @@ document.getElementById('to-main').addEventListener('click', () => {
 });
 
 document.getElementById('to-demographic').addEventListener('click', () => {
-   // проверка обязательных полей в main-questions
+  // проверка обязательных полей в main-questions
   const requiredFields = document.querySelectorAll('#main-questions [required]');
   let missing = [];
   requiredFields.forEach(field => {
     if (!field.value || (field.type === 'radio' && !document.querySelector(`input[name="${field.name}"]:checked`))) {
       missing.push(field.name);
+      field.classList.add('missing-answer'); // подсветка
+    } else {
+      field.classList.remove('missing-answer');
     }
   });
 
@@ -67,6 +74,7 @@ document.getElementById('to-demographic').addEventListener('click', () => {
     alert("Необходимо ответить на все обязательные вопросы перед переходом.");
     return; // прерываем переход
   }
+
   document.getElementById('main-questions').style.display = 'none';
   document.getElementById('demographic-block').style.display = 'block';
   document.getElementById('demographic-block').scrollIntoView({ behavior: 'smooth' });
@@ -110,6 +118,7 @@ document.querySelector('form').addEventListener('submit', async (e) => {
     e.target.reset();
   }
 });
+
 
 
 
