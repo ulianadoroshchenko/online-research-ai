@@ -80,6 +80,11 @@ select:focus {
   background-color: #ffe6e6;
 }
 
+input[type="radio"].missing-answer {
+  outline: 2px solid red;
+  outline-offset: 2px;
+}
+
 button[type="submit"] {
   background: linear-gradient(to right, #6a4fb3, #8e7ce0);
   color: white;
@@ -250,6 +255,7 @@ th, td {
   padding: 10px 12px;
 }
 }
+
 
 
 
