@@ -35,6 +35,27 @@ let lastBlockVisited = 'intro-question';
   }
 })();
 
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const { data, error } = await supabaseClient.from('responses').insert([{
+      ip: 'debug-ip',
+      created_at: new Date().toISOString(),
+      user_agent: navigator.userAgent,
+      seconds: 0,
+      completed: false,
+      exited_at_block: 'intro-question'
+    }]).select();
+
+    if (error) {
+      console.error('Ошибка при создании параданных:', error);
+    } else {
+      console.log('Параданные успешно созданы:', data);
+    }
+  } catch (err) {
+    console.error('Фатальная ошибка:', err);
+  }
+});
+
 // универсальная проверка блока
 function validateBlock(selector) {
   const requiredFields = document.querySelectorAll(`${selector} [required]`);
@@ -178,5 +199,6 @@ document.querySelector('form').addEventListener('submit', async (e) => {
     }
   }
 });
+
 
 
