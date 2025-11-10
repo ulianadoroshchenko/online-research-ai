@@ -153,9 +153,19 @@ window.addEventListener('beforeunload', async () => {
     exited_at_block: lastBlockVisited
   };
 
-  try {
-    await supabaseClient.from('responses').insert([payload]);
-  } catch (err) {
-    console.warn('Не удалось сохранить параданные выхода:', err);
-  }
+  // URL REST API Supabase
+  const url = 'https://kyewynzyetmjrhxcuvrw.supabase.co/rest/v1/responses';
+
+  // Заголовки для REST API
+  const headers = {
+    'Content-Type': 'application/json',
+    'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt5ZXd5bnp5ZXRtanJoeGN1dnJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyNjEzNjMsImV4cCI6MjA3NzgzNzM2M30.6rkx_snJPvvzCmDw0LsCLtRzQmlNLPp66damJsB283o',
+    'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt5ZXd5bnp5ZXRtanJoeGN1dnJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyNjEzNjMsImV4cCI6MjA3NzgzNzM2M30.6rkx_snJPvvzCmDw0LsCLtRzQmlNLPp66damJsB283o`
+  };
+
+  // Формируем тело запроса
+  const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+
+  // Отправляем через sendBeacon
+  navigator.sendBeacon(url, blob);
 });
