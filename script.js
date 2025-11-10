@@ -21,9 +21,9 @@ let lastBlockVisited = 'intro-question';
       user_agent: navigator.userAgent,
       seconds: 0,
       completed: false,
-      exited_at_block: lastBlockVisited
+      exited_at_block: 'intro-question'
     }]).select();
-
+    
     if (error) {
       console.error('Ошибка при создании параданных:', error);
     } else {
@@ -178,4 +178,5 @@ document.querySelector('form').addEventListener('submit', async (e) => {
     }
   }
 });
+
 
