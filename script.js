@@ -2,17 +2,33 @@ import { supabaseClient } from './supabase-config.js';
 
 console.log('Supabase клиент:', supabaseClient);
 
-// фиксируем время начала
 const startTime = Date.now();
+let userIp = null;
+let responseId = null;
 let lastBlockVisited = 'intro-question';
 
-// получаем IP
-let userIp = null;
+// получаем IP и создаём запись при заходе
 (async () => {
   try {
     const ipResponse = await fetch('https://api.ipify.org?format=json');
     const ipData = await ipResponse.json();
     userIp = ipData.ip;
+
+    const { data, error } = await supabaseClient.from('responses').insert([{
+      ip: userIp,
+      created_at: new Date().toISOString(),
+      user_agent: navigator.userAgent,
+      seconds: 0,
+      completed: false,
+      exited_at_block: lastBlockVisited
+    }]).select();
+
+    if (error) {
+      console.error('Ошибка при создании параданных:', error);
+    } else {
+      responseId = data[0].id;
+      console.log('Создана запись параданных:', responseId);
+    }
   } catch (err) {
     console.error('Не удалось получить IP:', err);
   }
@@ -49,6 +65,29 @@ function validateBlock(selector) {
   return missing;
 }
 
+// обновление параданных
+async function updateParadata(blockId, completed=false, extraData={}) {
+  if (!responseId) return;
+  const durationSeconds = Math.floor((Date.now() - startTime) / 1000);
+
+  const payload = {
+    seconds: durationSeconds,
+    exited_at_block: blockId,
+    completed,
+    ...extraData
+  };
+
+  const { error } = await supabaseClient.from('responses')
+    .update(payload)
+    .eq('id', responseId);
+
+  if (error) {
+    console.error('Ошибка при обновлении параданных:', error);
+  } else {
+    console.log('Обновлены параданные:', payload);
+  }
+}
+
 // переходы между блоками
 document.getElementById('to-main').addEventListener('click', () => {
   const missing = validateBlock('#intro-question');
@@ -70,10 +109,12 @@ document.getElementById('to-main').addEventListener('click', () => {
     document.getElementById('main-questions').style.display = 'block';
     document.getElementById('main-questions').scrollIntoView({ behavior: 'smooth' });
     lastBlockVisited = 'main-questions';
+    updateParadata(lastBlockVisited);
   } else {
     document.getElementById('demographic-block').style.display = 'block';
     document.getElementById('demographic-block').scrollIntoView({ behavior: 'smooth' });
     lastBlockVisited = 'demographic-block';
+    updateParadata(lastBlockVisited);
 
     document.querySelectorAll('#main-questions [required]').forEach(field => {
       field.removeAttribute('required');
@@ -92,6 +133,7 @@ document.getElementById('to-demographic').addEventListener('click', () => {
   document.getElementById('demographic-block').style.display = 'block';
   document.getElementById('demographic-block').scrollIntoView({ behavior: 'smooth' });
   lastBlockVisited = 'demographic-block';
+  updateParadata(lastBlockVisited);
 });
 
 // отправка формы
@@ -108,64 +150,30 @@ document.querySelector('form').addEventListener('submit', async (e) => {
   const data = Object.fromEntries(formData.entries());
 
   Object.keys(data).forEach(key => {
-    if (data[key] === "") {
-      delete data[key];
-    }
+    if (data[key] === "") delete data[key];
   });
 
-  const endTime = Date.now();
-  const durationSeconds = Math.floor((endTime - startTime) / 1000);
+  const durationSeconds = Math.floor((Date.now() - startTime) / 1000);
   lastBlockVisited = 'form-submitted';
 
   const payload = {
     ...data,
-    ip: userIp || null,
-    created_at: new Date().toISOString(),
-    user_agent: navigator.userAgent,
     seconds: durationSeconds,
     completed: true,
     exited_at_block: lastBlockVisited
   };
 
-  console.log('Финальный payload:', payload);
+  if (responseId) {
+    const { error } = await supabaseClient.from('responses')
+      .update(payload)
+      .eq('id', responseId);
 
-  const { error } = await supabaseClient.from('responses').insert([payload]);
-
-  if (error) {
-    console.error('Ошибка при отправке:', error.message || JSON.stringify(error));
-    alert('Что-то пошло не так...');
-  } else {
-    alert(`Спасибо за участие! Твои ответы уже обрабатываются нашими нейронами... ну, почти.`);
-    e.target.reset();
+    if (error) {
+      console.error('Ошибка при обновлении:', error);
+      alert('Что-то пошло не так...');
+    } else {
+      alert('Спасибо за участие! Твои ответы сохранены.');
+      e.target.reset();
+    }
   }
-});
-
-// параданные при выходе
-window.addEventListener('beforeunload', async () => {
-  const durationSeconds = Math.floor((Date.now() - startTime) / 1000);
-
-  const payload = {
-    ip: userIp || null,
-    created_at: new Date().toISOString(),
-    user_agent: navigator.userAgent,
-    seconds: durationSeconds,
-    completed: false,
-    exited_at_block: lastBlockVisited
-  };
-
-  // URL REST API Supabase
-  const url = 'https://kyewynzyetmjrhxcuvrw.supabase.co/rest/v1/responses';
-
-  // Заголовки для REST API
-  const headers = {
-    'Content-Type': 'application/json',
-    'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt5ZXd5bnp5ZXRtanJoeGN1dnJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyNjEzNjMsImV4cCI6MjA3NzgzNzM2M30.6rkx_snJPvvzCmDw0LsCLtRzQmlNLPp66damJsB283o',
-    'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt5ZXd5bnp5ZXRtanJoeGN1dnJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIyNjEzNjMsImV4cCI6MjA3NzgzNzM2M30.6rkx_snJPvvzCmDw0LsCLtRzQmlNLPp66damJsB283o`
-  };
-
-  // Формируем тело запроса
-  const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-
-  // Отправляем через sendBeacon
-  navigator.sendBeacon(url, blob);
 });
