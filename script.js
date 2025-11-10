@@ -35,26 +35,27 @@ let lastBlockVisited = 'intro-question';
   }
 })();
 
-document.addEventListener('DOMContentLoaded', async () => {
-  try {
-    const { data, error } = await supabaseClient.from('responses').insert([{
-      ip: 'debug-ip',
-      created_at: new Date().toISOString(),
-      user_agent: navigator.userAgent,
-      seconds: 0,
-      completed: false,
-      exited_at_block: 'intro-question'
-    }]).select();
+// ЧИСТЫЙ ОТЛАДОЧНЫЙ ВСТАВ (можешь отключить, если мешает)
+// document.addEventListener('DOMContentLoaded', async () => {
+//   try {
+//     const { data, error } = await supabaseClient.from('responses').insert([{
+//       ip: 'debug-ip',
+//       created_at: new Date().toISOString(),
+//       user_agent: navigator.userAgent,
+//       seconds: 0,
+//       completed: false,
+//       exited_at_block: 'intro-question'
+//     }]).select();
 
-    if (error) {
-      console.error('Ошибка при создании параданных:', error);
-    } else {
-      console.log('Параданные успешно созданы:', data);
-    }
-  } catch (err) {
-    console.error('Фатальная ошибка:', err);
-  }
-});
+//     if (error) {
+//       console.error('Ошибка при создании параданных:', error);
+//     } else {
+//       console.log('Параданные успешно созданы (debug):', data);
+//     }
+//   } catch (err) {
+//     console.error('Фатальная ошибка:', err);
+//   }
+// });
 
 // универсальная проверка блока
 function validateBlock(selector) {
@@ -87,7 +88,7 @@ function validateBlock(selector) {
   return missing;
 }
 
-// обновление параданных
+// обновление параданных (время/блок/завершённость)
 async function updateParadata(blockId, completed=false, extraData={}) {
   if (!responseId) return;
   const durationSeconds = Math.floor((Date.now() - startTime) / 1000);
@@ -107,6 +108,97 @@ async function updateParadata(blockId, completed=false, extraData={}) {
     console.error('Ошибка при обновлении параданных:', error);
   } else {
     console.log('Обновлены параданные:', payload);
+  }
+}
+
+// ====== НОВОЕ: пошаговое сохранение каждого ответа ======
+
+// Собирает значение для чекбоксов с одинаковым name (как CSV)
+function collectCheckboxValues(name) {
+  return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`))
+    .map(cb => cb.value)
+    .join(',');
+}
+
+// Сохраняет одно поле ответа в Supabase
+async function saveAnswerField(name, rawValue) {
+  if (!responseId) {
+    console.warn('Запись ещё не создана, пропускаю сохранение:', name);
+    return;
+  }
+
+  // Для числовых полей (course, ранги) — приводим к числу, если это числа
+  let value = rawValue;
+  const numericNames = new Set([
+    'course',
+    'v12_start_success', 'v12_emotion_anyway', 'v12_emotional_topic', 'v12_help_needed', 'v12_comfortable',
+    'v15_wrong_first', 'v15_many_attempts', 'v15_tech_fail', 'v15_emotion_anyway', 'v15_long_dialogue',
+    'sex', 'v1','v2','v3','v4','v5','v7','v9','v10','v11','v13','v14','v19','v20','v21','v22'
+  ]);
+
+  if (numericNames.has(name) && value !== '') {
+    const num = Number(value);
+    if (!Number.isNaN(num)) value = num;
+  }
+
+  const payload = { [name]: value };
+
+  const { error } = await supabaseClient.from('responses')
+    .update(payload)
+    .eq('id', responseId);
+
+  if (error) {
+    console.error(`Ошибка сохранения поля "${name}":`, error);
+  } else {
+    console.log(`Сохранено поле "${name}":`, value);
+  }
+}
+
+// Навешиваем обработчики на все поля: радио, чекбоксы, текст, textarea, select
+function attachAnswerListeners() {
+  const inputs = document.querySelectorAll('input, textarea, select');
+
+  inputs.forEach(el => {
+    el.addEventListener('change', async (e) => {
+      const name = e.target.name;
+      if (!name) return;
+
+      let value;
+
+      if (e.target.type === 'checkbox') {
+        // собираем все выбранные значения для группы чекбоксов
+        value = collectCheckboxValues(name);
+      } else {
+        value = e.target.value;
+      }
+
+      await saveAnswerField(name, value);
+
+      // обновляем пароданные: фиксируем последний посещённый блок и время
+      await updateParadata(lastBlockVisited, false);
+    });
+  });
+
+  // Дополнительно: показывать/скрывать v22_other и сохранять его
+  const v22Radios = document.querySelectorAll('input[name="v22"]');
+  const v22OtherInput = document.getElementById('v22_other');
+  if (v22Radios.length && v22OtherInput) {
+    v22Radios.forEach(r => {
+      r.addEventListener('change', () => {
+        if (r.value === '6') {
+          v22OtherInput.style.display = 'block';
+        } else {
+          v22OtherInput.style.display = 'none';
+          v22OtherInput.value = '';
+          // очистим в базе, если было заполнено
+          saveAnswerField('v22_other', '');
+        }
+      });
+    });
+
+    v22OtherInput.addEventListener('input', () => {
+      saveAnswerField('v22_other', v22OtherInput.value);
+    });
   }
 }
 
@@ -194,11 +286,13 @@ document.querySelector('form').addEventListener('submit', async (e) => {
       console.error('Ошибка при обновлении:', error);
       alert('Что-то пошло не так...');
     } else {
-      alert('Спасибо за участие! Твои ответы сохранены.');
+      alert('Спасибо за участие! Ваши ответы уже обрабатываются нашими нейронами... ну, почти.');
       e.target.reset();
     }
   }
 });
 
-
-
+// запуск: как только DOM готов — вешаем слушатели
+document.addEventListener('DOMContentLoaded', () => {
+  attachAnswerListeners();
+});
