@@ -1,4 +1,5 @@
 import { supabaseClient } from './supabase-config.js';
+window.supabaseClient = supabaseClient;
 
 console.log('Supabase клиент:', supabaseClient);
 
@@ -177,3 +178,4 @@ document.querySelector('form').addEventListener('submit', async (e) => {
     }
   }
 });
+
